@@ -5,7 +5,7 @@ import cors from 'cors';
 
 import * as middlewares from './middlewares';
 import api from './api';
-import MessageResponse from './interfaces/MessageResponse';
+import routes from './routes';
 
 require('dotenv').config();
 
@@ -16,12 +16,22 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-app.get<{}, MessageResponse>('/', (req, res) => {
-  res.json({
-    message: '🦄🌈✨👋🌎🌍🌏✨🌈🦄',
-  });
+// ROUTE LIST
+app.get('/', (_, res) => {
+  res.send(`
+    <h1>Order API</h1>
+    <p>Order API is a RESTful API for managing orders.</p>
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <a href="/orders">GET '/orders'</a>
+      <a href="/orders">POST '/orders'</a>
+      <a href="/orders/1">GET '/orders/1'</a>
+      <a href="/orders/1">PUT '/orders/1'</a>
+      <a href="/orders/1">DELETE '/orders/1'</a>
+    </div>
+  `);
 });
 
+app.use('/', routes);
 app.use('/api/v1', api);
 
 app.use(middlewares.notFound);
