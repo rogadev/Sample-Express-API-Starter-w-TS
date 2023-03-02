@@ -31,9 +31,11 @@ app.get('/', (_, res) => {
   `);
 });
 
+// CONTROLLERS
 app.use('/', routes);
 app.use('/api/v1', api);
 
+// MIDDLEWARES
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
 
