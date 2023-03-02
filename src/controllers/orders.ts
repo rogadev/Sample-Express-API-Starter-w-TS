@@ -1,4 +1,6 @@
-export const getAll = (req, res) => {
+import { Request } from 'express';
+
+export const getAll = (_: Request, res: any) => {
   // TODO - get all orders.
   // TODO - page should populate form inputs with form data. Form data is sent if we are creating a new order, submit, and then get an error.
   // TODO - page should populate form errors with error data. Form data is sent if we are editing an order, submit, and then get an error.
@@ -6,7 +8,7 @@ export const getAll = (req, res) => {
   res.send('GET /orders');
 };
 
-export const createOne = (req, res) => {
+export const createOne = (_: Request, res: any) => {
   // TODO - get form data from request body.
   // TODO - validate form data.
   // TODO - if there's an error:
@@ -16,7 +18,7 @@ export const createOne = (req, res) => {
   res.send('POST /orders');
 };
 
-export const getOne = (req, res) => {
+export const getOne = (req: Request, res: any) => {
   const { id } = req.params;
   // TODO - get order by id.
   // TODO - if order doesn't exist, return 404.
@@ -24,7 +26,7 @@ export const getOne = (req, res) => {
   res.send(`GET /orders/${id}`);
 };
 
-export const updateOne = (req, res) => {
+export const updateOne = (req: Request, res: any) => {
   const { id } = req.params;
   // TODO - find this order matching the id.
   // TODO - if order doesn't exist, return 404.
@@ -38,7 +40,7 @@ export const updateOne = (req, res) => {
   res.send(`PUT /orders/${id}`);
 };
 
-export const deleteOne = (req, res) => {
+export const deleteOne = (req: Request, res: any) => {
   const { id } = req.params;
   // TODO - find this order matching the id.
   // TODO - if order doesn't exist, return 404.
