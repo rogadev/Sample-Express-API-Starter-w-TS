@@ -5,7 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Orders</title>
-    <script src="scripts/orders.js" defer></script>
+    <script>
+      // const orders = <%= JSON.stringify(orders) %>;
+      console.log(orders)
+      const orderList = document.getElementById('order-list')
+      for (const order of orders) {
+        const orderItem = document.createElement('div')
+        orderItem.innerHTML = `
+          <h3>${order.name}</h3>
+          <p>${order.description}</p>
+          <p>${order.price}</p>
+        `
+        orderList.appendChild(orderItem)
+      }
+    </script>
   </head>
   <body>
     <h1>
