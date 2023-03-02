@@ -1,16 +1,17 @@
 import express from 'express';
 import * as orders from '../controllers/orders';
+import { Response } from 'express';
 
 const router = express.Router();
 
-router.get('/orders', orders.getAll);
+router.get<{}, Response>('/orders', orders.getAll);
 
-router.post('/orders', orders.createOne);
+router.post<{}, Response>('/orders', orders.createOne);
 
-router.get('/orders/:id', orders.getOne);
+router.get<{ id: number; }, Response>('/orders/:id', orders.getOne);
 
-router.put('/orders/:id', orders.updateOne);
+router.put<{ id: number; }, Response>('/orders/:id', orders.updateOne);
 
-router.delete('/orders/:id', orders.deleteOne);
+router.delete<{ id: number; }, Response>('/orders/:id', orders.deleteOne);
 
 export default router;
