@@ -1,11 +1,14 @@
 import { Request } from 'express';
+import fs from 'fs';
 
 export const getAll = (_: Request, res: any) => {
   // TODO - get all orders.
+  const ordersJson = fs.readFileSync('src/data/pizzaOrders.json', 'utf8');
+  const orders = JSON.parse(ordersJson);
   // TODO - page should populate form inputs with form data. Form data is sent if we are creating a new order, submit, and then get an error.
+  res.send(orders);
   // TODO - page should populate form errors with error data. Form data is sent if we are editing an order, submit, and then get an error.
   // TODO - clicking on an order in the list will take us to the order detail page for that order.
-  res.send('GET /orders');
 };
 
 export const createOne = (_: Request, res: any) => {

@@ -1,3 +1,4 @@
+// let me use no semicolon in js files
 {
   "compilerOptions": {
     "outDir": "dist",
@@ -8,7 +9,7 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
   },
   "include": [
     "./*.js",
@@ -16,4 +17,8 @@
     "src/**/*.ts",
     "test/**/*.ts",
   ],
+  "exclude": [
+    "node_modules",
+    "dist",
+  ]
 }
