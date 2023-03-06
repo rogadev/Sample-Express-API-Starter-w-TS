@@ -26,7 +26,8 @@ export enum PizzaSize {
 const orderSchema = z.object({
   id: z
     .number({ required_error: 'ID must be a number.' })
-    .int({ message: 'ID must be an integer.' }),
+    .int({ message: 'ID must be an integer.' })
+    .optional(),
   type: z
     .nativeEnum(PizzaType, { required_error: `Pizza type must be one of the following: ${Object.values(PizzaType).join(', ')}` }),
   crust: z
@@ -38,8 +39,7 @@ const orderSchema = z.object({
     .int({ message: 'Quantity must be an integer.' }),
   pricePer: z
     .number({ required_error: 'Price Per must be a number' })
-    .min(0)
-    .refine((value) => !Number.isInteger(value), { message: 'Price Per must be a decimal number.' }),
+    .min(0),
   orderDate: z
     .string({ required_error: 'Order Date must be entered as a string.' })
     .regex(/^\d{4}-\d{2}-\d{2}$/, { message: 'Order date must be in the format yyyy-mm-dd.' }),

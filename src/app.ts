@@ -5,7 +5,6 @@ import cors from 'cors';
 
 import * as middlewares from './middlewares';
 import api from './api';
-import routes from './routes';
 
 require('dotenv').config();
 
@@ -32,8 +31,8 @@ app.get('/', (_, res) => {
 });
 
 // CONTROLLERS
-app.use('/', routes);
-app.use('/api/v1', api);
+app.use(express.static('src/public'));
+app.use('/api', api);
 
 // MIDDLEWARES
 app.use(middlewares.notFound);
