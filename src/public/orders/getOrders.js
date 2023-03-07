@@ -25,6 +25,7 @@ const createHeaderRow = () => {
   const sizeHeader = document.createElement('div')
   const quantityHeader = document.createElement('div')
   const priceHeader = document.createElement('div')
+  const totalHeader = document.createElement('div')
 
   // Add classes for the header row
   headerRow.classList.add('row', 'border')
@@ -36,6 +37,7 @@ const createHeaderRow = () => {
   sizeHeader.classList.add('col')
   priceHeader.classList.add('col')
   quantityHeader.classList.add('col')
+  totalHeader.classList.add('col')
 
   // Add the text for the headers
   orderDateHeader.innerText = 'Order Date'
@@ -45,6 +47,7 @@ const createHeaderRow = () => {
   sizeHeader.innerText = 'Size'
   quantityHeader.innerText = 'Quantity'
   priceHeader.innerText = 'Price Ea.'
+  totalHeader.innerText = 'Total'
 
   // Append all the headers to the header row.
   headerRow.append(
@@ -54,7 +57,8 @@ const createHeaderRow = () => {
     crustTypeHeader,
     sizeHeader,
     quantityHeader,
-    priceHeader
+    priceHeader,
+    totalHeader
   )
 
   // Append the header row to the order list.
@@ -86,6 +90,7 @@ const fetchAndRenderOrders = async () => {
     // Create a div for the order.
     const orderDiv = document.createElement('div')
     orderDiv.classList.add('row', 'border')
+    orderDiv.style.cursor = 'pointer'
 
     // Make the order div clickable.
     orderDiv.onclick = () => {
@@ -129,6 +134,14 @@ const fetchAndRenderOrders = async () => {
       style: 'currency',
       currency: 'USD',
     }).format(order.pricePer)}`
+
+    // Total Cell
+    const totalDiv = document.createElement('div')
+    totalDiv.classList.add('col')
+    totalDiv.innerText = `${Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(order.pricePer * order.quantity)}`
 
     // Append all the cells to the order div.
     orderDiv.append(
