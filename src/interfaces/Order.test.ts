@@ -105,7 +105,7 @@ test('Order validation function returns errors when order price per is invalid',
     crust: 'thin crust',
     size: 'large',
     quantity: 1,
-    pricePer: 12,
+    pricePer: 'ff',
     orderDate: '2021-01-01',
   };
   const { success, errors } = validate(order);
@@ -135,7 +135,7 @@ test('We get an expected error message in the errors object for every invalid fi
     crust: 'chicken',
     size: 'huge',
     quantity: '1',
-    pricePer: 12,
+    pricePer: 'fff',
     orderDate: 'tomorrow',
   };
   const { success, errors } = validate(order);
