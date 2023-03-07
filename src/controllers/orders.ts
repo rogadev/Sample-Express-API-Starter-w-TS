@@ -1,6 +1,94 @@
 import { Request } from 'express';
 import fs from 'fs';
-import { Order, validate } from '../interfaces/Order';
+import { Order, validate, PizzaSize, PizzaType, CrustType } from '../interfaces/Order';
+
+const htmlSizeOptions = (defaultSize: PizzaSize) => {
+  return Object.values(PizzaSize).map((size) => {
+    return `<option value="${size}" ${defaultSize === size ? 'selected' : ''}>${size}</option>`;
+  });
+};
+
+const htmlTypeOptions = (defaultType: PizzaType) => {
+  return Object.values(PizzaType).map((type) => {
+    return `<option value="${type}" ${defaultType === type ? 'selected' : ''}>${type}</option>`;
+  });
+};
+
+const htmlCrustOptions = (defaultCrust: CrustType) => {
+  return Object.values(CrustType).map((crust) => {
+    return `<option value="${crust}" ${defaultCrust === crust ? 'selected' : ''}>${crust}</option>`;
+  });
+};
+
+const getTotal = (pricePer: number, quantity: number) => {
+  pricePer = Number.parseFloat(pricePer.toFixed(2));
+  quantity = Number.parseInt(quantity.toFixed(0));
+  const total = pricePer * quantity;
+  return Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(total);
+};
+
+const createHTMLOrderForm = (order: Order) => {
+  const { id, type, crust, size, quantity, pricePer, orderDate } = order;
+  const date = orderDate.split('/').join('-');
+
+  return `
+  <html lang="en">
+    <head>
+      <title>Order #${id}</title>
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+        crossorigin="anonymous"
+      />
+    </head>
+    <body>
+      <form method="POST" action="/orders/${id}">
+        <div>
+          <p>Order #${id}</p>
+        </div>
+        <div>
+          <label for="type">Type</label>
+          <select name="type" id="type">
+            ${htmlTypeOptions(type)}
+          </select>
+
+        </div>
+        <div>
+          <label for="crust">Crust</label>
+          <select name="crust" id="crust">
+            ${htmlCrustOptions(crust)}
+          </select>
+        </div>
+        <div>
+          <label for="size">Size</label>
+          <select name="size" id="size">
+            ${htmlSizeOptions(size)}
+          </select>
+        </div>
+        <div>
+          <label for="quantity">Quantity</label>
+          <input type="number" name="quantity" id="quantity" value="${quantity}" />
+        </div>
+        <div>
+          <label for="pricePer">Price Per</label>
+          <input type="number" min="0.01" max="100.00" step="0.01" name="pricePer" id="pricePer" value="${pricePer}" />
+        </div>
+        <div>
+          <label for="orderDate">Order Date</label>
+          <input type="date" name="orderDate" id="orderDate" value="${date}" />
+        </div>
+        <div>
+          <p>Total Price: ${getTotal(pricePer, quantity)}</p>
+        </div>
+        <div>
+          <button type="submit">Update</button>
+        </div>
+      </form>
+    </body>
+  </html>
+  `;
+};
 
 export const getAll = (req: Request, res: any) => {
 
@@ -51,24 +139,56 @@ export const createOne = (req: Request, res: any) => {
 
 export const getOne = (req: Request, res: any) => {
   const { id } = req.params;
-  // TODO - get order by id.
-  // TODO - if order doesn't exist, return 404.
-  // TODO - if order exists, return order data.
-  res.send(`GET /orders/${id}`);
+
+  const ordersJson = fs.readFileSync('src/data/pizzaOrders.json', 'utf8');
+  const orders = JSON.parse(ordersJson);
+
+  const order = orders.find((o: Order) => o.id === Number.parseInt(id));
+  if (!order) {
+    return res.status(404).send('Order not found.');
+  }
+
+  const html = createHTMLOrderForm(order);
+
+  res.send(html);
 };
 
 export const updateOne = (req: Request, res: any) => {
+  // find this order matching the id.
   const { id } = req.params;
-  // TODO - find this order matching the id.
-  // TODO - if order doesn't exist, return 404.
-  // TODO - if order exists:
-  // TODO   - get form data from request body.
-  // TODO   - validate form data.
-  // TODO   - if there's an error:
-  // TODO    - returns data for a form to edit an order.
-  // TODO    - returns error data related to each field of the form.
-  // TODO   - if no errors, update order.
-  res.send(`PUT /orders/${id}`);
+  const ordersJson = fs.readFileSync('src/data/pizzaOrders.json', 'utf8');
+  const orders = JSON.parse(ordersJson);
+  const order = orders.find((o: Order) => o.id === Number.parseInt(id));
+  // if order doesn't exist, return 404.
+  if (!order) {
+    console.error('Failed to update order. Order not found.', id);
+    return res.status(404).send('Order not found.');
+  }
+  // if order exists, validate input fields
+  console.log('req.body', req.body);
+  const result = validate(req.body);
+  if (!result.success) {
+    console.error('Failed to update order. Validation error.', result.errors);
+    return res.status(400).send({ errors: result.errors });
+  }
+  // if validation passes, update order.
+  try {
+    // Update the order.
+    order.type = req.body.type;
+    order.crust = req.body.crust;
+    order.size = req.body.size;
+    order.quantity = Number.parseInt(req.body.quantity);
+    order.pricePer = Number.parseFloat(Number.parseFloat(req.body.pricePer).toFixed(2));
+    order.orderDate = req.body.orderDate;
+    // Write the updated array to the pizzaOrders.json file.
+    fs.writeFileSync('src/data/pizzaOrders.json', JSON.stringify(orders));
+  } catch (e) {
+    console.error('Failed to update order. Error reading/writing to file.', e);
+    return res.status(500).send('Error updating order.');
+  }
+  // Lastly, if successfully updating our order, redirect to same page, but with a get request.
+  return res.redirect(`/orders/${id}`);
+
 };
 
 export const deleteOne = (req: Request, res: any) => {
@@ -76,5 +196,5 @@ export const deleteOne = (req: Request, res: any) => {
   // TODO - find this order matching the id.
   // TODO - if order doesn't exist, return 404.
   // TODO - if order exists, delete order.
-  res.send(`DELETE /orders/${id}`);
+  res.send(`DELETE / orders / ${id} `);
 };
