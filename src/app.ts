@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 
 import * as middlewares from './middlewares';
+import routes from './routes';
 import api from './api';
 
 require('dotenv').config();
@@ -32,6 +33,7 @@ app.get('/', (_, res) => {
 
 // CONTROLLERS
 app.use(express.static('src/public'));
+app.use('/', routes);
 app.use('/api', api);
 
 // MIDDLEWARES
