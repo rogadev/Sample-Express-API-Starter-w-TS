@@ -43,7 +43,7 @@ const createHTMLOrderForm = (order: Order) => {
       />
     </head>
     <body>
-      <form method="POST" action="/orders/${id}">
+      <form method="PUT" action="/orders/${id}">
         <div>
           <p>Order #${id}</p>
         </div>
