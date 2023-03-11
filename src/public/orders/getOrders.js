@@ -28,16 +28,16 @@ const createHeaderRow = () => {
   const totalHeader = document.createElement('div')
 
   // Add classes for the header row
-  headerRow.classList.add('row', 'border')
+  headerRow.classList.add('header-row', 'border')
   headerRow.style.fontWeight = 'bold'
-  orderNumberHeader.classList.add('col')
-  orderDateHeader.classList.add('col')
-  orderTypeHeader.classList.add('col')
-  crustTypeHeader.classList.add('col')
-  sizeHeader.classList.add('col')
-  priceHeader.classList.add('col')
-  quantityHeader.classList.add('col')
-  totalHeader.classList.add('col')
+  orderNumberHeader.classList.add('header-cell')
+  orderDateHeader.classList.add('header-cell')
+  orderTypeHeader.classList.add('header-cell')
+  crustTypeHeader.classList.add('header-cell')
+  sizeHeader.classList.add('header-cell')
+  priceHeader.classList.add('header-cell')
+  quantityHeader.classList.add('header-cell')
+  totalHeader.classList.add('header-cell')
 
   // Add the text for the headers
   orderDateHeader.innerText = 'Order Date'
@@ -89,7 +89,7 @@ const fetchAndRenderOrders = async () => {
   for (const order of orders) {
     // Create a div for the order.
     const orderDiv = document.createElement('div')
-    orderDiv.classList.add('row', 'border')
+    orderDiv.classList.add('order-row', 'border')
     orderDiv.style.cursor = 'pointer'
 
     // Make the order div clickable.
@@ -99,37 +99,37 @@ const fetchAndRenderOrders = async () => {
 
     // Order Date Cell (Sorted)
     const orderDateDiv = document.createElement('div')
-    orderDateDiv.classList.add('col')
+    orderDateDiv.classList.add('order-cell')
     orderDateDiv.innerText = capitalCase(order.orderDate)
 
     // Order Number Cell
     const orderNumberDiv = document.createElement('div')
-    orderNumberDiv.classList.add('col')
+    orderNumberDiv.classList.add('order-cell')
     orderNumberDiv.innerText = order.id
 
     // Order Type Cell
     const orderTypeDiv = document.createElement('div')
-    orderTypeDiv.classList.add('col')
+    orderTypeDiv.classList.add('order-cell')
     orderTypeDiv.innerText = capitalCase(order.type)
 
     // Crust Type Cell
     const crustTypeDiv = document.createElement('div')
-    crustTypeDiv.classList.add('col')
+    crustTypeDiv.classList.add('order-cell')
     crustTypeDiv.innerText = capitalCase(order.crust)
 
     // Size Cell
     const sizeDiv = document.createElement('div')
-    sizeDiv.classList.add('col')
+    sizeDiv.classList.add('order-cell')
     sizeDiv.innerText = capitalCase(order.size)
 
     // Quantity Cell
     const quantityDiv = document.createElement('div')
-    quantityDiv.classList.add('col')
+    quantityDiv.classList.add('order-cell')
     quantityDiv.innerText = order.quantity
 
     // Price Cell
     const priceDiv = document.createElement('div')
-    priceDiv.classList.add('col')
+    priceDiv.classList.add('order-cell')
     priceDiv.innerText = `${Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -137,7 +137,7 @@ const fetchAndRenderOrders = async () => {
 
     // Total Cell
     const totalDiv = document.createElement('div')
-    totalDiv.classList.add('col')
+    totalDiv.classList.add('order-cell')
     totalDiv.innerText = `${Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -151,7 +151,8 @@ const fetchAndRenderOrders = async () => {
       crustTypeDiv,
       sizeDiv,
       quantityDiv,
-      priceDiv
+      priceDiv,
+      totalDiv
     )
 
     // Append the order div to the order list.

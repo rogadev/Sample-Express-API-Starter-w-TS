@@ -115,6 +115,11 @@ submitButton.type = 'submit'
 submitButton.innerText = 'Submit'
 submitButton.classList.add('btn', 'btn-primary')
 
+// create a container and put our button in it so it sits on the far right
+const buttonContainer = document.createElement('div')
+buttonContainer.classList.add('d-flex', 'justify-content-end', 'mt-4')
+buttonContainer.append(submitButton)
+
 // Append our form fields to the form.
 formObject.append(
   orderDateLabel,
@@ -129,7 +134,7 @@ formObject.append(
   quantity,
   priceLabel,
   price,
-  submitButton
+  buttonContainer
 )
 
 // Append our form to the DOM.
