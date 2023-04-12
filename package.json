@@ -33,7 +33,7 @@
     "@types/node": "^18.15.5",
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
-    "@typescript-eslint/parser": "^5.54.1",
+    "@typescript-eslint/parser": "^5.58.0",
     "eslint": "^8.38.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-import-resolver-typescript": "^3.5.3",
